@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\TempImagesController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -47,6 +48,10 @@ Route::group(['prefix'=> 'admin'], function () {
 
     });
 
+    //temp-images.create
+    Route::post('/upload-temp-images', [TempImagesController::class,'create'])->name("temp-images.create");
+
+    //Auto fill slug
     Route::get("/getSlug", function (Request $request) {
         $slug = '';
         if(!empty($request->title))

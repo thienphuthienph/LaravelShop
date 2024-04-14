@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\admin;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
-
+use App\Models\TempImage;   
+use Illuminate\Support\Facades\File;
 class CategoryController extends Controller
 {
     public function index(Request $request)
@@ -44,6 +45,24 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
 
+            //Save image
+            if(!empty($request->image_id))
+            {
+                $tempImage = TempImage::find($request->image_id);
+                $extArray = explode(".",$tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $category->id.".".$ext;
+
+                $sPath = public_path()."/temp/".$tempImage->name;
+                $dPath = public_path()."/uploads/category/".$newImageName;
+
+                File::copy($sPath,$dPath);
+
+                $category->image = $newImageName;
+                $category->save();
+            }
+
             $request->session()->flash("success","Category added successfully");
 
             return response()->json([
@@ -62,7 +81,6 @@ class CategoryController extends Controller
                 "errors"=> $validator->errors()
             ]);
             */
-
         }
         else
         {
