@@ -45,8 +45,21 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
 
+
+            $tempImage = TempImage::find($request->image_id);
+                $extArray = explode(".",$tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $category->id.".".$ext;
+
+                $sPath = public_path()."/temp/".$tempImage->name;
+                $dPath = public_path()."/uploads/category/".$newImageName;
+
+                File::copy($sPath,$dPath);
+                $category->image = $newImageName;
+                $category->save();
             //Save image
-            if(!empty($request->image_id))
+            /*if(!empty($request->image_id))
             {
                 $tempImage = TempImage::find($request->image_id);
                 $extArray = explode(".",$tempImage->name);
@@ -58,10 +71,9 @@ class CategoryController extends Controller
                 $dPath = public_path()."/uploads/category/".$newImageName;
 
                 File::copy($sPath,$dPath);
-
                 $category->image = $newImageName;
                 $category->save();
-            }
+            }*/
 
             $request->session()->flash("success","Category added successfully");
 

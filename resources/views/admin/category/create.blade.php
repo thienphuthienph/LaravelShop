@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="col-md-3">
-                                    <input type="hidden" id="image_id" name="image_id" value="">
+                                    <input type="" id="image_id" name="image_id" value="">
                                     <label for="image">image</label>
                                     <div id="image" class="dropzone dz-clickable">
                                         <div class="dz-message needsclick">    
@@ -163,13 +163,13 @@
             maxFiles: 1,
             paramName: 'image',
             addRemoveLinks: true,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
+            acceptedFiles: "image/jpeg,image/png,image/gif,image/PNG",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(file, response) {
-                $("#image_id").val(response.image_id);
-                //console.log(response)
+                $("#image_id").val(response.img_id);
+                console.log(response)
             }
         });
     </script>
