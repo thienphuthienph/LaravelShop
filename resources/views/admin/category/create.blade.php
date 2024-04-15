@@ -33,10 +33,11 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <!--Khong the thay doi gia tri trong slug-->
                                 <div class="mb-3">
                                     <label for="email">Slug</label>
-                                    <input type="text" name="slug" id="slug" class="form-control"
-                                        placeholder="Slug">
+                                    <input type="text" name="slug" id="slug" readonly
+                                        class="form-control"placeholder="Slug">
                                     <p></p>
                                 </div>
                             </div>
@@ -45,8 +46,8 @@
                                     <input type="hidden" id="image_id" name="image_id" value="">
                                     <label for="image">image</label>
                                     <div id="image" class="dropzone dz-clickable">
-                                        <div class="dz-message needsclick">    
-                                            <br>Drop files here or click to upload.<br><br>                                            
+                                        <div class="dz-message needsclick">
+                                            <br>Drop files here or click to upload.<br><br>
                                         </div>
                                     </div>
                                 </div>
@@ -129,25 +130,20 @@
             })
         });
 
-        $("#name").change(function() {
-            element = $(this);
-            $("button[type=submit]").prop('disable', true);
-            $.ajax({
-                url: '{{ route('getSlug') }}',
-                type: 'get',
-                data: {
-                    title: element.val()
-                },
-                dataType: 'json',
-                success: function(response) {
-                    $("button[type=submit]").prop('disable', false);
-                    if (response["status"] == true) {
-                        $("#slug").val(response["slug"]);
-                    }
+        //Lay du lieu cua name bo vao slug
+        $(document).ready(function() {
+            $('#name').on('input', function() {
+                var name = $(this).val();
+                var slug = slugify(name); 
 
-                }
+                $('#slug').val(slug); 
             });
-        })
+        });
+        //Dinh dang slug name-name
+        function slugify(text) {
+            return text.toString().toLowerCase()
+                 .replace(/\s+/g, '-') // Thay the khoang trong thanh dau gach ngang
+        }
 
 
         Dropzone.autoDiscover = false;
