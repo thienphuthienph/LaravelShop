@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
 use App\Models\TempImage;   
 use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 class CategoryController extends Controller
 {
     public function index(Request $request)
@@ -30,6 +32,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $manager = new ImageManager(new Driver());
         $validator = Validator::make($request->all(),
         [
             "name"=> "required",
@@ -47,17 +50,22 @@ class CategoryController extends Controller
 
 
             $tempImage = TempImage::find($request->image_id);
-                $extArray = explode(".",$tempImage->name);
-                $ext = last($extArray);
+            $extArray = explode(".",$tempImage->name);
+            $ext = last($extArray);
 
-                $newImageName = $category->id.".".$ext;
+            $newImageName = $category->id.".".$ext;
+            $sPath = public_path()."/temp/".$tempImage->name;
+            $dPath = public_path()."/uploads/category/".$newImageName;
+            File::copy($sPath,$dPath);
 
-                $sPath = public_path()."/temp/".$tempImage->name;
-                $dPath = public_path()."/uploads/category/".$newImageName;
+            //Tao thumbnail
+            $dPath = public_path()."/uploads/category/thumb/".$newImageName;
+            $img = $manager->read($sPath);
+            $img->resize(450,600);
+            $img->save($dPath);
 
-                File::copy($sPath,$dPath);
-                $category->image = $newImageName;
-                $category->save();
+            $category->image = $newImageName;
+            $category->save();
             //Save image
             /*if(!empty($request->image_id))
             {
