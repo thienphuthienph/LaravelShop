@@ -24,9 +24,10 @@
                 <form action="" method="GET">
                     <div class="card-header">
                         <div class="card-title">
-                            <button type="button"
-                                onclick="window.location.href='{{ route('categories.index') }}' class="btn-btn-default
-                                btn-sm">Reset</button>
+                            
+                            <div class="col-sm-6 text-right">
+                                <a href="#" onclick="window.location.href='{{ route('categories.index') }}'" class="btn btn-primary">Reset</a>
+                            </div>
                         </div>
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">
