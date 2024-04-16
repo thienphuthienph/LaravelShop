@@ -11,6 +11,7 @@ use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use PHPUnit\Framework\Constraint\IsEmpty;
 class CategoryController extends Controller
 {
     public function index(Request $request)
@@ -151,12 +152,14 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
 
+            $oldImage = $category->image;
+
 
             $tempImage = TempImage::find($request->image_id);
             $extArray = explode(".",$tempImage->name);
             $ext = last($extArray);
 
-            $newImageName = $category->id.".".$ext;
+            $newImageName = $category->id."-".time().'.'.$ext;
             $sPath = public_path()."/temp/".$tempImage->name;
             $dPath = public_path()."/uploads/category/".$newImageName;
             File::copy($sPath,$dPath);
@@ -218,6 +221,10 @@ class CategoryController extends Controller
     {
         $category = Category::find($categoryId);
 
+        if(empty($category))
+        {
+            return redirect()->route("categories.index")->withErrors("category not found");
+        }
         $category->delete();
        
 
