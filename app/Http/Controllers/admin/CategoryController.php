@@ -146,7 +146,7 @@ class CategoryController extends Controller
         if($validator->passes())
         {
             //Truy van Eloquent ORM
-            $category = new Category();
+            //$category = new Category();
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
@@ -217,16 +217,22 @@ class CategoryController extends Controller
         }
     }
 
-    public function destroy($categoryId, Request $request, $id)
+    public function destroy($categoryId, Request $request)
     {
         $category = Category::find($categoryId);
 
         if(empty($category))
         {
-            return redirect()->route("categories.index")->withErrors("category not found");
+            return response()->json([
+                "status"=> false,
+                "message"=> "Category not exist"
+                ]);
         }
+        File::delete(public_path("/uploads/category/thumb/".$category->image));
+        File::delete(public_path("/uploads/category/".$category->image));
         $category->delete();
        
+        $request->session()->flash("success","Category delete successfully");
 
         return redirect()->route("categories.index");
 
