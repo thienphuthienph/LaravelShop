@@ -208,7 +208,7 @@ class CategoryController extends Controller
             ]);
             */
         }
-        else
+        else    
         {
             return response()->json([
                 "status"=> false,
@@ -233,7 +233,7 @@ class CategoryController extends Controller
         $category->delete();
        
         $request->session()->flash("success","Category delete successfully");
-
+    
         return redirect()->route("categories.index");
 
     }

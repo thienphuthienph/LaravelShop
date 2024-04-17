@@ -87,7 +87,7 @@
 		<!-- Dropzone-->
 		<script src="{{asset('admin-assets/plugins/dropzone/min/dropzone.min.js')}}"></script>
 
-		@yield('customJs')c
+		@yield('customJs')
 
 		<script type="text/javascript">
 			$.ajaxSetup({
