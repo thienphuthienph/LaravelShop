@@ -68,6 +68,16 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email">Show Home</label>
+                                    <select name="showHome" id="showHome" class="form-control">
+                                        <option {{$category->showHome=='Yes' ? 'selected' : '' }} value="1">Active</option>
+                                        <option {{$category->showHome=='No' ? 'selected' : ''}} value="0">Block</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,7 +121,7 @@
 
                         if (response["not found"] == true)
                         {
-                            window.location.href = "{{route('category.index')}}";
+                            window.location.href = "{{route('categories.index')}}";
                         }
                         var errors = response['errors']
 

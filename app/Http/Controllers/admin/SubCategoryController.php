@@ -39,17 +39,19 @@ class SubCategoryController extends Controller
           $validate = Validator::make(
                $request->all(),
                [
-                    "name" => "required",
-                    "slug" => "required|unique:categories",
-
+                    "name"=> "required",
+                    "slug" => "required", 
                ]
-          );
+           );
+           
           if ($validate->passes()) {
                $subcategory = new SubCategory();
                $subcategory->name = $request->name;
                $subcategory->slug = $request->status;
                $subcategory->status = $request->status;
+               $subcategory->showHome = $request->showHome;
                $subcategory->category_id = $request->category;
+
                $subcategory->save();
 
                $request->session()->flash("success", "Sub Category add successfully");
@@ -96,10 +98,11 @@ class SubCategoryController extends Controller
           }
 
           $validator = Validator::make($request->all(), [
-               "name"=> "require|unique:name",
+               "name"=> "required",
                "slug" => "required|unique:categories,slug,'.$subCategory->id.',id",
                "category" => "required",
                "status" => "required"
+               
                ]);
 
           if ($validator->passes())
@@ -108,6 +111,7 @@ class SubCategoryController extends Controller
                $subCategory->slug = $request->slug;
                $subCategory->category_id = $request->category;
                $subCategory->status = $request->status;
+               $subCategory->showHome = $request->showHome;
                $subCategory->save();
 
                $request->session()->flash("success","SubCategory updated successfully");

@@ -59,6 +59,14 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                            <div class="mb-3">
+                                <label for="email">Show on home</label>
+                                <select name="showHome" id="showHome" class="form-control">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
 
                         </div>
                     </div>
