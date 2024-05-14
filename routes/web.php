@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\BrandController;
+use App\Http\Controllers\admin\DiscountController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\SubCategoryController;
@@ -11,6 +14,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +30,11 @@ use Illuminate\Support\Str;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Route::get("/test",function(){
+//     getOrder(33);
+// });
+
+Route::get("/", [FrontController::class, "index"])->name("front.home");
 
 Route::get("/", [FrontController::class, "index"])->name("front.home");
 Route::get("/shop/{categorySlug?}/{subCategorySlug?}", [ShopController::class, "index"])->name("front.shop");
@@ -35,8 +44,11 @@ Route::post("/update-cart", [CartController::class, "update"])->name("front.upda
 Route::post("/delete-cart", [CartController::class, "delete"])->name("front.deleteCart");
 Route::get("/checkout", [CartController::class,"checkout"])->name("cart.checkout");
 Route::post("/process-checkout", [CartController::class, "processCheckout"])->name("front.processCheckout");
-Route::get("/thankyou/{orderId}",[CartController::class,"thankyou"])->name("cart.thankyou");
-
+Route::get("/thankyou/{id}",[CartController::class,"thankyou"])->name("cart.thankyou");
+Route::post("/get-order-summary", [CartController::class, "getOrderSummary"])->name("cart.getOrderSummary");
+Route::post("/apply-discount", [CartController::class, "applyDiscount"])->name("cart.applyDiscount");
+Route::post("/remove-discount", [CartController::class, "removeCoupon"])->name("cart.removeCoupon");
+Route::post("/add-to-whishlist", [FrontController::class, "addToWishlist"])->name("front.addToWhishlist");
 
 Route::group(['prefix' => 'account'], function () {
 
@@ -49,8 +61,12 @@ Route::group(['prefix' => 'account'], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/profile', [AuthController::class,'profile'])->name("account.profile");
+        Route::post('/update-profile', [AuthController::class,'updateProfile'])->name("account.updateProfile");
         Route::get("/logout", [AuthController::class,"logout"])->name("account.logout");
-        
+        Route::get('/my-orders', [AuthController::class,'orders'])->name("account.orders");
+        Route::get('/my-wishlist', [AuthController::class,'wishlist'])->name("account.wishlist");
+        Route::get('/order-detail/{id}', [AuthController::class,'orderDetail'])->name("account.orderDetail");
+        Route::post('/my-remove-product-from-wishlist', [AuthController::class,'removeProductFromWishlist'])->name("account.removeProductFromWishlist");
     });
 });
 
@@ -95,7 +111,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete("/brands/{brand}/delete", [BrandController::class, "destroy"])->name("brands.delete");
 
 
-        //Product Route
+        //Product Routes
         Route::get("/products/index", [ProductController::class, "index"])->name("products.index");
         Route::get('/products/create', [ProductController::class, 'create'])->name("products.create");
         Route::get("/product-subcategories", [ProductSubCategoryController::class, "index"])->name("product-subcategories.index");////
@@ -106,6 +122,32 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/products/{product}', [ProductController::class, 'update'])->name("products.update");
         Route::delete("/products/{product}/delete", [ProductController::class, "destroy"])->name("products.delete");
 
+        //Shipping Routes
+        Route::get("/shipping/create", [ShippingController::class, "create"])->name("shipping.create");
+        Route::get("/shipping/edit/{country_id}", [ShippingController::class, "edit"])->name("shipping.edit");
+        Route::post("/shipping/store", [ShippingController::class, "store"])->name("shipping.store");
+        Route::put("/shipping/update/{id}", [ShippingController::class, "update"])->name("shipping.update");
+        Route::delete("/shipping/delete/{id}", [ShippingController::class, "destroy"])->name("shipping.delete");
+
+        // //Discount Routes
+        Route::get("/coupons/create", [DiscountController::class, "create"])->name("coupons.create");
+        Route::get("/coupons/index", [DiscountController::class, "index"])->name("coupons.index");
+        Route::get("/coupons/edit/{coupon_id}", [DiscountController::class, "edit"])->name("coupons.edit");
+        Route::post("/coupons/store", [DiscountController::class, "store"])->name("coupons.store");
+        Route::put("/coupons/update/{id}", [DiscountController::class, "update"])->name("coupons.update");
+        Route::delete("/coupons/delete/{id}", [DiscountController::class, "destroy"])->name("coupons.delete");
+
+        //Order Routes
+        Route::get("/orders/list", [OrderController::class, "list"])->name("orders.list");
+        Route::get("/orders/detail/{id}", [OrderController::class, "detail"])->name("orders.detail");
+        Route::post("/order/change-status/{id}",[OrderController::class, "changeOrderStatus"])->name("orders.changeOrderStatus");
+        Route::post("/order/send-invoice/{id}",[OrderController::class, "sendInvoice"])->name("orders.sendInvoice");
+
+        //User Routes
+        Route::get("/users/list", [UserController::class, "index"])->name("users.list");
+        Route::get("/users/edit/{id}", [UserController::class, "edit"])->name("users.edit");
+        Route::put("/users/update/{id}", [UserController::class, "update"])->name("users.update");
+        Route::delete("/users/delete/{id}", [UserController::class, "delete"])->name("users.delete");
     });
 
     //temp-images.create

@@ -29,7 +29,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <input type="text" name="first_name" id="first_name" class="form-control"
-                                                placeholder="First Name">
+                                                value="{{ $customerAddress->first_name }}" placeholder="First Name">
                                             <p></p>
                                         </div>
 
@@ -37,7 +37,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <input type="text" name="last_name" id="last_name" class="form-control"
-                                                placeholder="Last Name">
+                                                value="{{ $customerAddress->last_name }}" placeholder="Last Name">
                                             <p></p>
                                         </div>
 
@@ -46,7 +46,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <input type="text" name="email" id="email" class="form-control"
-                                                placeholder="Email">
+                                                value="{{ $customerAddress->email }}" placeholder="Email">
                                             <p></p>
                                         </div>
 
@@ -54,14 +54,12 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <select name="country" id="country" class="form-control">
-                                                <option value="">Select a Country</option>
-                                                @if (!empty($countries))
-                                                    @foreach ($countries as $country)
-                                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                                    @endforeach
-                                                @endif
-
+                                            <select id="country" name="country" class="form-control">
+                                                @foreach ($countries as $country)
+                                                    <option
+                                                        {{ $customerAddress->country_id == $country->id ? 'selected' : '' }}
+                                                        value="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
                                             </select>
                                             <p></p>
                                         </div>
@@ -148,15 +146,40 @@
                                 @endforeach
                                 <div class="d-flex justify-content-between summery-end">
                                     <div class="h6"><strong>Subtotal</strong></div>
-                                    <div class="h6"><strong>{{ Cart::subtotal() }}</strong></div>
+                                    <div class="h6"><strong>{{ number_format(Cart::subtotal(2, '.', '')) }}
+                                            VND</strong>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between summery-end">
+                                    <div class="h6"><strong>Discount</strong></div>
+                                    <div class="h6"><strong id="discount_value" name="discount_value"> - {{ number_format($discount) }}
+                                            VND</strong>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
-                                    <div class="h6"><strong>$20</strong></div>
+                                    <div class="h6" id="shippingAmount">
+                                        <strong id= >{{ number_format($totalShippingCharge) }} VND</strong>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2 summery-end">
                                     <div class="h5"><strong>Total</strong></div>
-                                    <div class="h5"><strong>{{ Cart::subtotal() }}</strong></div>
+                                    <div class="h5" id="grandTotal"><strong>{{ number_format($grandTotal) }}
+                                            VND</strong></div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="input-group apply-coupan mt-4">
+                            <input type="text" placeholder="Coupon Code" class="form-control" name="discount_code"
+                                id="discount_code">
+                            <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
+                        </div>
+
+                        <div id="discount-response-wrapper">
+                            @if (Session::has('code'))
+                                <div class="mt-4" id="discount-response">
+                                    <strong id="coupon_code" name="coupon_code">{{ Session::get('code')->code }}</strong>
+                                    <a class="btn btn-danger" id="remove-discount"><i class="fa fa-times"></i></a>
                                 </div>
                             @endif
                         </div>
@@ -323,6 +346,67 @@
                         window.location.href = ("{{ url('/thankyou/') }}/") + response.orderId;
                     }
 
+                }
+            })
+        });
+
+        $("#country").change(function(event) {
+            $.ajax({
+                url: '{{ route('cart.getOrderSummary') }}',
+                type: 'post',
+                data: {
+                    country_id: $(this).val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == true) {
+                        $("#shippingAmount").html(response.shippingCharge + " VND");
+                        $("#grandTotal").html(response.grandTotal + " VND");
+                    }
+                }
+            })
+        });
+
+        
+        $("#apply-discount").click(function() {
+            $.ajax({
+                url: '{{ route('cart.applyDiscount') }}',
+                type: 'post',
+                data: {
+                    code: $("#discount_code").val(),
+                    country_id: $("#country").val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == true) {
+                        $("#shippingAmount").html(response.shippingCharge + " VND");
+                        $("#grandTotal").html(response.grandTotal + " VND");
+                        $("#discount_value").html(response.discount + " VND");
+                        $("#discount-response-wrapper").html(response.discountString);
+                    }
+                    else
+                    {
+                        $("#discount-response-wrapper").html(response.message);
+                    }
+                }
+            })
+        });
+
+        $("#remove-discount").click(function() {
+            $.ajax({
+                url: '{{ route('cart.removeCoupon') }}',
+                type: 'post',
+                data: {
+                    country_id: $("#country").val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == true) {
+                        $("#shippingAmount").html(response.shippingCharge + " VND");
+                        $("#grandTotal").html(response.grandTotal + " VND");
+                        $("#discount_value").html(response.discount + " VND");
+                        $("#discount-response").html("");
+                    }
                 }
             })
         });

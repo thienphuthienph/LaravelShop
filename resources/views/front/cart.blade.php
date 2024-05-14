@@ -97,17 +97,10 @@
                             <h2 class="bg-white">Cart Summery</h3>
                         </div>
                         <div class="card-body">
-                            <div class="d-flex justify-content-between pb-2">
-                                <div>Subtotal</div>
-                                <div>{{ number_format((float) Cart::subtotal(), 0) }} VND</div>
-                            </div>
-                            <div class="d-flex justify-content-between pb-2">
-                                <div>Shipping</div>
-                                <div>$20</div>
-                            </div>
+                            
                             <div class="d-flex justify-content-between summery-end">
                                 <div>Total</div>
-                                <div>{{ Cart::subtotal() }}</div>
+                                <div>{{number_format((float)Cart::subtotal("0",".",""))}} VND</div>
                             </div>
                             <div class="pt-5">
                                 <a href="{{route('cart.checkout')}}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>

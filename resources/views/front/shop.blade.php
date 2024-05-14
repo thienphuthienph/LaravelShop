@@ -140,7 +140,7 @@
                                                     src="{{ asset('uploads/product/small/' . $productImage->image) }}">
                                             @endif
 
-                                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <a onclick="addToWhishlist({{$product->id}})" class="whishlist" href="#"><i class="far fa-heart"></i></a>
 
                                             <div class="product-action">
                                                 <a class="btn btn-dark" href="javascipt:void(0);" onclick="addToCart({{$product->id}});">
@@ -209,49 +209,7 @@
         window.location.href = url + '&brand=' + brands.toString() ;
     }
 
-    function addToCart(id)
-    {
-        $.ajax({
-            url: '{{route("front.addToCart")}}',
-            type: 'post',
-            data: {id:id},
-            dataType: 'json',
-            success: function(response)
-            {
-                if(response.status == true)
-                {
-                    window.location.href = "{{route('front.cart')}}";
-                }else
-                {
-                    alert(response.message);
-                }
-            }
-
-        })
-    }
-
-   
-
-    function deleteCart(id)
-    {
-        $.ajax({
-            url: '{{route("front.addToCart")}}',
-            type: 'post',
-            data: {id:id},
-            dataType: 'json',
-            success: function(response)
-            {
-                if(response.status == true)
-                {
-                    window.location.href = "{{route('front.cart')}}";
-                }else
-                {
-                    alert(response.message);
-                }
-            }
-
-        })
-    }
+    
 </script>
 
 @endsection

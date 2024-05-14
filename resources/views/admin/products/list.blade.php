@@ -71,9 +71,9 @@
                                             @endif
                                         </td>
                                         <td><a href="#">{{ $product->title }}</a></td>
-                                        <td>{{ $product->price }}</td>
+                                        <td>{{number_format($product->price) }} VND</td>
                                         <td>{{ $product->qty }} left in Stock</td>
-                                        <td>{{ $product->sky }}</td>
+                                        <td>{{ $product->sku }}</td>
                                         <td>
                                             @if ($product->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success"
