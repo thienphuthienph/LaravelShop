@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </form>
                     </div>
 
                     <div class="card">
@@ -59,21 +59,22 @@
                             <h2 class="h5 mb-0 pt-2 pb-2">Address</h2>
                         </div>
 
-                        <form action="" id="profileForm" name="profileForm">
+                        <form action="" id="addressForm" name="addressForm">
                             <div class="card-body p-4">
                                 <div class="row">
                                     <div class="mb-3">
                                         <label for="name">First Name</label>
                                         <input type="text" name="first_name" id="first_name"
-                                            placeholder="Enter Your First Name" class="form-control" value="{{$address->first_name}}"
-                                            >
+                                            placeholder="Enter Your First Name" class="form-control" 
+                                            value="{{(!empty($address)) ? $address->first_name : "" }}">
                                         <p></p>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="name">Last Name</label>
-                                        <input type="text" name="first_name" id="last_name"
+                                        <input type="text" name="last_name" id="last_name"
                                             placeholder="Enter Your Last Name" class="form-control"
+                                            value="{{(!empty($address)) ? $address->last_name : "" }}"
                                             >
                                         <p></p>
                                     </div>
@@ -81,12 +82,13 @@
                                     <div class="mb-3">
                                         <label for="email">Email</label>
                                         <input type="text" name="email" id="email" placeholder="Enter Your Email"
-                                            class="form-control" value="{{ $user->email }}">
+                                            class="form-control"  value="{{(!empty($address)) ? $address->email : "" }}">
                                         <p></p>
                                     </div>
                                     <div class="mb-3">
                                         <label for="phone">Mobile</label>
-                                        <input type="text" name="phone" id="phone" placeholder="Enter Your Phone"
+                                        <input type="text" name="mobile" id="mobile" placeholder="Enter Your Phone"
+                                        value="{{(!empty($address)) ? $address->mobile : "" }}"
                                             class="form-control" >
                                         <p></p>
                                     </div>
@@ -94,7 +96,7 @@
                                         <label for="phone">Country</label>
                                         <select name="country_id" id="country_id" class="form-control">
                                             @foreach ($countries as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                <option {{(!empty($address) && $address->country_id == $item->id) ? 'selected' : "" }} value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                         <p></p>
@@ -103,13 +105,14 @@
                                     <div class="mb-3">
                                         <label for="phone">Address</label>
                                         <input type="text" name="address" id="address" placeholder="Enter Your Address"
-                                            class="form-control" >
+                                            class="form-control"   value="{{(!empty($address)) ? $address->address : "" }}">
                                         <p></p>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="phone">Apartment</label>
                                         <input type="text" name="apartment" id="apartment" placeholder="Apartment"
+                                        value="{{(!empty($address)) ? $address->apartment : "" }}"
                                             class="form-control">
                                         <p></p>
                                     </div>
@@ -117,6 +120,7 @@
                                     <div class="mb-3">
                                         <label for="phone">City</label>
                                         <input type="text" name="city" id="city" placeholder="City"
+                                        value="{{(!empty($address)) ? $address->city : "" }}"
                                             class="form-control" >
                                         <p></p>
                                     </div>
@@ -124,6 +128,7 @@
                                     <div class="mb-3">
                                         <label for="phone">State</label>
                                         <input type="text" name="state" id="state" placeholder="State"
+                                        value="{{(!empty($address)) ? $address->state : "" }}"
                                             class="form-control" >
                                         <p></p>
                                     </div>
@@ -131,7 +136,7 @@
                                     
                                     <div class="mb-3">
                                         <label for="phone">Zip</label>
-                                        <input type="text" name="zip" id="zip" placeholder="Zip"
+                                        <input type="text" name="zip" id="zip" placeholder="Zip"   value="{{(!empty($address)) ? $address->zip : "" }}"
                                             class="form-control">
                                         <p></p>
                                     </div>
@@ -142,7 +147,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </form>
                     </div>
                 </div>
             </div>
@@ -210,6 +215,28 @@
                                 .siblings('p')
                                 .removeClass('invalid-feedback').html("");
                         }
+                    }
+
+                }
+            })
+        })
+
+        $("#addressForm").submit(function(event) {
+            event.preventDefault();
+            var element = $(this);
+            $("button[type=submit]").prop('disable', true);
+            $.ajax({
+                url: '{{ route('account.updateAddress') }}',
+                type: 'post',
+                data: element.serializeArray(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response["status"] == true) {
+
+                        window.location.href = "{{ route('account.profile') }}";
+
+                    } else {
+                      
                     }
 
                 }

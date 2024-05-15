@@ -43,7 +43,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="5" placeholder="Description" value="{{$coupon->description}}"
+                                    <textarea name="description" id="description" cols="30" rows="5" value="{{$coupon->description}}"
                                         class="form-control"></textarea>
                                     <p></p>
                                 </div>

@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::orderBy("id","asc")->get();
         
+        if (!empty($request->get("keyword"))) {
+            $users = $users->where("name", "like", "%" . $request->get("keyword") . "%");
+        }
+
         $data["users"] = $users;
         return view("admin.users.index",$data);
     }  

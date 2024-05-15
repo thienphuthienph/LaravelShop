@@ -143,6 +143,56 @@ class AuthController extends Controller
                 "errors" => $validator->errors(),
             ]);
         }
+    }
+
+    public function updateAddress(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            "first_name" => "required|min:5",
+            "last_name" => "required",
+            "email" => "required",
+            "country_id" => "required",
+            "address" => "required|min:20",
+            "city" => "required",
+            "zip" => "required",
+            "mobile" => "required",
+        ]);
+        
+
+        if($validator->passes())
+        {
+            CustomerAddress::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'mobile' => $request->mobile,
+                    'country_id' => $request->country_id,
+    
+                    'address' => $request->address,
+                    'apartment' => $request->apartment,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'zip' => $request->zip,
+                ]
+            );
+
+            session()->flash("success","account updated");
+            return response()->json([
+                "status" => true,
+                "message" => "account updated successfully",
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "status" => false,
+                "errors" => $validator->errors(),
+            ]);
+        }
 
 
 
