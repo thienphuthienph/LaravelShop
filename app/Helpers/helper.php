@@ -4,6 +4,7 @@ use App\Mail\OrderMail;
 use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\Order;
+use App\Models\Page;
 
 function getCategories()
 {
@@ -36,4 +37,9 @@ function getOrder($id)
     ];
 
     Mail::to($order->email)->send(new OrderMail($mailData));
+}
+
+function getPage()
+{
+    return Page::where("slug","get-in-touch")->first();
 }

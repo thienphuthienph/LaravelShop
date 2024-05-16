@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\DiscountController;
+use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\UserController;
@@ -49,6 +50,7 @@ Route::post("/get-order-summary", [CartController::class, "getOrderSummary"])->n
 Route::post("/apply-discount", [CartController::class, "applyDiscount"])->name("cart.applyDiscount");
 Route::post("/remove-discount", [CartController::class, "removeCoupon"])->name("cart.removeCoupon");
 Route::post("/add-to-whishlist", [FrontController::class, "addToWishlist"])->name("front.addToWhishlist");
+Route::get("/page/{slug}",[FrontController::class,"page"])->name("front.page");
 
 Route::group(['prefix' => 'account'], function () {
 
@@ -149,6 +151,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get("/users/edit/{id}", [UserController::class, "edit"])->name("users.edit");
         Route::put("/users/update/{id}", [UserController::class, "update"])->name("users.update");
         Route::delete("/users/delete/{id}", [UserController::class, "delete"])->name("users.delete");
+
+        //Page Routes
+        Route::get("/pages/create", [PageController::class, "create"])->name("pages.create");
+        Route::post("/pages/store", [PageController::class, "store"])->name("pages.store");
+        Route::get("/pages/edit/{id}", [PageController::class, "edit"])->name("pages.edit");
+        Route::put("/pages/update/{id}", [PageController::class, "update"])->name("pages.update");
+        Route::delete("/pages/delete/{id}", [PageController::class, "destroy"])->name("pages.delete");
+        Route::get("/pages/list", [PageController::class, "index"])->name("pages.list");
     });
 
     //temp-images.create
