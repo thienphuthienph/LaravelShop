@@ -17,6 +17,8 @@
 
 		<link rel="stylesheet" href="{{asset('admin-assets/css/custom.css')}}">
 
+		<link rel="stylesheet" href="{{asset('admin-assets/css/datetimepicker.css')}}">
+
 		<meta name="csrf-token" content="{{csrf_token()}}">
 	</head>
 	<body class="hold-transition sidebar-mini">
@@ -86,6 +88,8 @@
 		<script src="{{asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 		<!-- AdminLTE App -->
 		<script src="{{asset('admin-assets/js/adminlte.min.js')}}"></script>
+		<!--Datetime picker-->
+		<script src="{{asset('admin-assets/js/datetimepicker.js')}}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{asset('admin-assets/js/demo.js')}}"></script>
 		<!-- Dropzone-->

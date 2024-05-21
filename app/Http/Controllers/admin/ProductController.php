@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Review;
 use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\TempImage;
@@ -245,5 +246,29 @@ class ProductController extends Controller
             "message"=> "Product deleted successfully",
         ]);
 
+    }
+
+    public function productRating()
+    {
+        $rating = Review::select("reviews.*","products.title as productTitle")->orderBy("created_at","desc");
+        $rating = $rating->leftJoin("products","products.id","reviews.product_id");
+        $rating = $rating->paginate(10);
+        return view("admin.products.rating",[
+            "ratings" => $rating
+        ]);
+    }
+
+    public function changeRatingStatus(Request $request)
+    {
+        $productRate = Review::find($request->id);
+        $productRate->status = $request->status;
+        $productRate->save();
+
+        return response()->json(
+            [
+                "status" => true,
+                "message" => "success"
+            ]
+            );
     }
 }

@@ -23,33 +23,33 @@
 			<div class="col-lg-4 col-6">							
 				<div class="small-box card">
 					<div class="inner">
-						<h3>150</h3>
+						<h3>{{$totalOrder}}</h3>
 						<p>Total Orders</p>
 					</div>
 					<div class="icon">
 						<i class="ion ion-bag"></i>
 					</div>
-					<a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+					<a href="{{route('orders.list')}}" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
 				</div>
 			</div>
 			
 			<div class="col-lg-4 col-6">							
 				<div class="small-box card">
 					<div class="inner">
-						<h3>50</h3>
+						<h3>{{$totalCustomer}}</h3>
 						<p>Total Customers</p>
 					</div>
 					<div class="icon">
 						<i class="ion ion-stats-bars"></i>
 					</div>
-					<a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+					<a href="{{route("users.list")}}" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
 				</div>
 			</div>
 			
 			<div class="col-lg-4 col-6">							
 				<div class="small-box card">
 					<div class="inner">
-						<h3>$1000</h3>
+						<h3>{{number_format($totalSale)}} VND</h3>
 						<p>Total Sale</p>
 					</div>
 					<div class="icon">
@@ -66,5 +66,18 @@
 @endsection
 
 @section('customJs')
-	<script> console.log("hello")</script>
+	<script>
+		console.log("hello")
+		$(document).ready(function() {
+            $('#start_at').datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+        });
+		$(document).ready(function() {
+            $('#start_at').datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+        });
+
+	</script>
 @endsection

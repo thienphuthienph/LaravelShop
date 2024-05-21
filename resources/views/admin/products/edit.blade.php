@@ -181,7 +181,7 @@
                                     <select name="sub_category" id="sub_category" class="form-control">
                                         @if ($subCategories->isNotEmpty())
                                             @foreach ($subCategories as $subCategory)
-                                                <option {{ $product->brand_id == $subCategory->id ? 'selected' : '' }}
+                                                <option {{ $product->sub_category_id == $subCategory->id ? 'selected' : '' }}
                                                     value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
                                             @endforeach
                                         @endif
@@ -197,7 +197,7 @@
                                         <option value="">Select a brand</option>
                                         @if ($brands->isNotEmpty())
                                             @foreach ($brands as $brand)
-                                                <option {{ $product->sub_category_id == $brand->id ? 'selected' : '' }}
+                                                <option {{ $product->brand_id == $brand->id ? 'selected' : '' }}
                                                     value="{{ $brand->id }}">{{ $brand->name }}</option>
                                             @endforeach
                                         @endif
