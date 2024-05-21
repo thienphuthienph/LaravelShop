@@ -58,15 +58,6 @@
 					<a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
 				</div>
 			</div>
-
-			<div class="col-md-6">
-				<div class="mb-3">
-					<label for="name">Filer date</label>
-					<input type="text" name="start_at" id="start_at"
-						class="form-control"placeholder="Start at">
-					<p></p>
-				</div>
-			</div>
 		</div>
 	</div>					
 	<!-- /.card -->

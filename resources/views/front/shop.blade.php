@@ -5,7 +5,7 @@
         <div class="container">
             <div class="light-font">
                 <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="white-text" href={{route("front.home")}}>Home</a></li>
                     <li class="breadcrumb-item active">Shop</li>
                 </ol>
             </div>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row pb-3">
-                        <div class="col-12 pb-1">
+                        {{-- <div class="col-12 pb-1">
                             <div class="d-flex align-items-center justify-content-end mb-4">
                                 <div class="ml-2">
                                     <div class="btn-group">
@@ -124,7 +124,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         @if ($products->isNotEmpty())
                             @foreach ($products as $product)
@@ -149,7 +149,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body text-center mt-3">
-                                            <a class="h6 link" href="product.php">{{ $product->title }}</a>
+                                            <a class="h6 link" href={{route("front.product", $product->id)}}>{{ $product->title }}</a>
                                             <div class="price mt-2">
                                                 <span class="h5"><strong>{{ number_format($product->price,0) }} VND</strong></span>
                                                 @if ($product->compare_price > 0)

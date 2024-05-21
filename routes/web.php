@@ -51,6 +51,8 @@ Route::post("/apply-discount", [CartController::class, "applyDiscount"])->name("
 Route::post("/remove-discount", [CartController::class, "removeCoupon"])->name("cart.removeCoupon");
 Route::post("/add-to-whishlist", [FrontController::class, "addToWishlist"])->name("front.addToWhishlist");
 Route::get("/page/{slug}",[FrontController::class,"page"])->name("front.page");
+Route::get("/product/{id}",[ShopController::class , "product"])->name("front.product");
+Route::post("/save-review/{productId}", [ShopController::class, "saveReview"])->name("front.saveReview");
 
 Route::group(['prefix' => 'account'], function () {
 
@@ -116,6 +118,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         //Product Routes
         Route::get("/products/index", [ProductController::class, "index"])->name("products.index");
+        Route::get("/products/rating", [ProductController::class, "productRating"])->name("products.productRating");
         Route::get('/products/create', [ProductController::class, 'create'])->name("products.create");
         Route::get("/product-subcategories", [ProductSubCategoryController::class, "index"])->name("product-subcategories.index");////
         Route::post("/product-images/update", [ProductImageController::class, "update"])->name("product-images.update");/////
@@ -124,6 +127,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/products/{product}/edit', [ProductController::class, "edit"])->name("products.edit");
         Route::put('/products/{product}', [ProductController::class, 'update'])->name("products.update");
         Route::delete("/products/{product}/delete", [ProductController::class, "destroy"])->name("products.delete");
+        Route::get('/change-rating-status', [ProductController::class, "changeRatingStatus"])->name("products.changeRatingStatus");
 
         //Shipping Routes
         Route::get("/shipping/create", [ShippingController::class, "create"])->name("shipping.create");
